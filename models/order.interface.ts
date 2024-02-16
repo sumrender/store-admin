@@ -1,8 +1,9 @@
-interface OrderItem {
+export interface OrderItem {
   product: string;
+  name: string;
   price: number;
   quantity: number;
-  name: string;
+  image: string;
 }
 
 interface OrderUser {
@@ -20,4 +21,19 @@ export interface Order {
   isPaid: boolean;
   orderStatus: string;
   orderItems: OrderItem[];
+  finalPrice: number;
 }
+
+export enum OrderStatusEnum {
+  PENDING = "pending",
+  DELIVERED = "delivered",
+  RETURNED = "returned",
+  CANCELED = "canceled",
+}
+
+export const orderStatusArray = [
+  OrderStatusEnum.PENDING,
+  OrderStatusEnum.DELIVERED,
+  OrderStatusEnum.RETURNED,
+  OrderStatusEnum.CANCELED,
+];

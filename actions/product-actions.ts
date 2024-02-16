@@ -33,6 +33,7 @@ interface createProductItem {
   category: string;
   description: string;
   images: string[];
+  isFeatured?: boolean;
 }
 
 interface CreateProductProps {

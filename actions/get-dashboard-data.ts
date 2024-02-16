@@ -1,4 +1,5 @@
 import { BASE_URL, TOKEN } from "@/constants/data";
+import { Order } from "@/models/order.interface";
 import axios, { AxiosResponse } from "axios";
 
 interface GraphData {
@@ -12,11 +13,13 @@ interface DashboardData {
   totalRevenue: number;
 }
 
-
 export const getDashboardData = async (): Promise<DashboardData> => {
-  const res: AxiosResponse<Order[]> = await axios.get(BASE_URL + `/orders?isPaid=true`, {
-    headers: { Authorization: `Bearer ${TOKEN}` },
-  });
+  const res: AxiosResponse<Order[]> = await axios.get(
+    BASE_URL + `/orders?isPaid=true`,
+    {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    }
+  );
 
   const paidOrders = res.data;
 
@@ -70,10 +73,7 @@ export const getDashboardData = async (): Promise<DashboardData> => {
 
 export const getTotalRevenue = (paidOrders: Order[]): number => {
   const totalRevenue = paidOrders.reduce((total, order) => {
-    const orderTotal = order.orderItems.reduce((orderSum, item) => {
-      return orderSum + item.price * item.quantity;
-    }, 0);
-    return total + orderTotal;
+    return total + order.finalPrice;
   }, 0);
   return totalRevenue;
 };

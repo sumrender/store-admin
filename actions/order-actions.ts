@@ -1,5 +1,5 @@
 import { BASE_URL, TOKEN } from "@/constants/data";
-import { Order } from "@/models/order.interface";
+import { Order, OrderStatusEnum } from "@/models/order.interface";
 import axios, { AxiosResponse } from "axios";
 
 const ORDER_URL = BASE_URL + '/orders';
@@ -24,4 +24,20 @@ export const getOrderById = async (orderId: string): Promise<Order> => {
   );
 
   return order;
+};
+
+interface updateOrderProps {
+  orderStatus: OrderStatusEnum;
+}
+
+export const updateOrderStatus = async (id: string, data: updateOrderProps) => {
+  const { data: updatedOrder }: AxiosResponse<Order> = await axios.patch(
+    `${ORDER_URL}/${id}`,
+    data,
+    {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    }
+  );
+
+  return updatedOrder;
 };

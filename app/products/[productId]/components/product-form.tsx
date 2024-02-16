@@ -47,6 +47,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(1),
   category: z.string().min(1),
   description: z.string().min(10),
+  isFeatured: z.boolean().default(false).optional(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -83,6 +84,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         category: "",
         quantity: 0,
         description: "",
+        isFeatured: false,
       };
 
   const form = useForm<ProductFormValues>({
@@ -261,6 +263,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isFeatured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Featured</FormLabel>
+                    <FormDescription>
+                      This product will be marked as featured
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />

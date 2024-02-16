@@ -1,6 +1,4 @@
 import { format } from "date-fns";
-
-import prismadb from "@/lib/prismadb";
 import { formatter } from "@/lib/utils";
 
 import { OrderColumn } from "./components/columns";
@@ -8,23 +6,25 @@ import { OrderClient } from "./components/client";
 import { getAllOrders } from "@/actions/order-actions";
 
 const OrdersPage = async () => {
-  // const orders = await getAllOrders();
-  const orders:any = [];
+  const orders = await getAllOrders();
 
   const formattedOrders: OrderColumn[] = orders.map((item) => ({
     id: item._id,
     // phone: item.phone,
+    userEmail: item.user.email,
+    orderStatus: item.orderStatus,
     address: item.user.address,
     products: item.orderItems
-      .map((orderItem) => orderItem.product.name)
+      .map((orderItem) => orderItem.name)
       .join(", "),
     totalPrice: formatter.format(
       item.orderItems.reduce((total, item) => {
-        return total + Number(item.product.price);
+        const curr = item.price*item.quantity;
+        return total + curr;
       }, 0)
     ),
     isPaid: item.isPaid,
-    createdAt: format(item.createdAt, "MMMM do, yyyy"),
+    createdAt: format(new Date(item.createdAt), "MMMM do, yyyy"),
   }));
 
   return (
